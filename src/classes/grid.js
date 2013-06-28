@@ -655,46 +655,7 @@ var ngGrid = function ($scope, options, sortService, domUtilityService, $filter,
     $scope.i18n = {};
     $utils.seti18n($scope, self.config.i18n);
     $scope.adjustScrollLeft = function (scrollLeft) {
-        var colwidths = 0,
-            totalLeft = 0,
-            x = $scope.columns.length,
-            newCols = [],
-            dcv = !self.config.enableColumnHeavyVirt;
-        var r = 0;
-        var addCol = function (c) {
-            if (dcv) {
-                newCols.push(c);
-            } else {
-                if (!$scope.renderedColumns[r]) {
-                    $scope.renderedColumns[r] = c.copy();
-                } else {
-                    $scope.renderedColumns[r].setVars(c);
-                }
-            }
-            r++;
-        };
-        for (var i = 0; i < x; i++) {
-            var col = $scope.columns[i];
-            if (col.visible !== false) {
-                var w = col.width + colwidths;
-                if (col.pinned) {
-                    addCol(col);
-                    var newLeft = i > 0 ? (scrollLeft + totalLeft) : scrollLeft;
-                    domUtilityService.setColLeft(col, newLeft, self);
-                    totalLeft += col.width;
-                } else {
-                    if (w >= scrollLeft) {
-                        if (colwidths <= scrollLeft + self.rootDim.outerWidth) {
-                            addCol(col);
-                        }
-                    }
-                }
-                colwidths += col.width;
-            }
-        }
-        if (dcv) {
-            $scope.renderedColumns = newCols;
-        }
+        $scope.renderedColumns = $scope.columns;
     };
     self.prevScrollTop = 0;
     self.prevScrollIndex = 0;
